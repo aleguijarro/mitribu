@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * ─────────────────────────────────────────────────────────────
+ * TOKENS DE DISEÑO DE MITRIBU
+ * ─────────────────────────────────────────────────────────────
+ * Todo el sistema de color vive aquí, en formato HSL sin la función
+ * hsl() envolvente (Tailwind la añade). Si quieres cambiar la
+ * identidad de marca, este es el único sitio que necesitas tocar:
+ * cambia --primary y --coral y toda la app se actualiza sola.
+ */
+@layer base {
+  :root {
+    --background: 32 38% 97%;
+    --foreground: 20 14% 11%;
+
+    --surface: 0 0% 100%;
+    --surface-hover: 32 30% 95%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 20 14% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 14% 11%;
+
+    /* Verde "tribu": frescor, campus, crecimiento */
+    --primary: 152 64% 36%;
+    --primary-foreground: 0 0% 100%;
+    --primary-50: 152 55% 97%;
+    --primary-100: 152 50% 92%;
+    --primary-600: 152 68% 29%;
+    --primary-700: 152 70% 23%;
+
+    --secondary: 32 30% 93%;
+    --secondary-foreground: 20 14% 15%;
+
+    /* Coral cálido: likes, alertas suaves, energía */
+    --coral: 8 88% 61%;
+    --coral-foreground: 0 0% 100%;
+
+    --muted: 32 25% 94%;
+    --muted-foreground: 22 10% 42%;
+
+    --accent: 152 50% 92%;
+    --accent-foreground: 152 68% 22%;
+
+    --destructive: 4 78% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 55% 34%;
+    --success-foreground: 0 0% 100%;
+
+    --border: 30 20% 88%;
+    --input: 30 20% 87%;
+    --ring: 152 64% 36%;
+
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 20 14% 6%;
+    --foreground: 32 25% 95%;
+
+    --surface: 20 13% 9%;
+    --surface-hover: 20 13% 12%;
+
+    --card: 20 13% 9%;
+    --card-foreground: 32 25% 95%;
+
+    --popover: 20 14% 8%;
+    --popover-foreground: 32 25% 95%;
+
+    --primary: 152 55% 46%;
+    --primary-foreground: 20 30% 8%;
+    --primary-50: 152 30% 12%;
+    --primary-100: 152 30% 16%;
+    --primary-600: 152 55% 55%;
+    --primary-700: 152 55% 62%;
+
+    --secondary: 20 12% 15%;
+    --secondary-foreground: 32 25% 92%;
+
+    --coral: 8 85% 64%;
+    --coral-foreground: 20 30% 8%;
+
+    --muted: 20 12% 14%;
+    --muted-foreground: 30 10% 62%;
+
+    --accent: 152 30% 15%;
+    --accent-foreground: 152 45% 78%;
+
+    --destructive: 4 72% 58%;
+    --destructive-foreground: 20 30% 8%;
+
+    --success: 152 45% 52%;
+    --success-foreground: 20 30% 8%;
+
+    --border: 20 12% 17%;
+    --input: 20 12% 18%;
+    --ring: 152 55% 46%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-primary-700;
+  }
+
+  /* Scrollbar discreto, coherente con la identidad premium de la app */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+    border: 2px solid hsl(var(--background));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer utilities {
+  /* Oculta la scrollbar pero mantiene el scroll (carruseles horizontales) */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .glass {
+    @apply bg-surface/70 backdrop-blur-xl backdrop-saturate-150;
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden bg-muted;
+    background-image: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0px,
+      hsl(var(--surface-hover)) 40px,
+      hsl(var(--muted)) 80px
+    );
+    background-size: 700px 100%;
+    animation: shimmer 1.6s infinite linear;
+  }
+}
