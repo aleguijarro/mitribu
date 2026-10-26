@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { Inbox } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/constants";
 import { ThemeToggle } from "./theme-toggle";
 import { NotificationsMenu } from "./notifications-menu";
@@ -15,6 +17,11 @@ export function MobileHeader() {
         <span className="text-base font-bold tracking-tight">{siteConfig.name}</span>
       </Link>
       <div className="flex items-center gap-1">
+        <Button asChild variant="ghost" size="icon" aria-label="Solicitudes">
+          <Link href="/solicitudes">
+            <Inbox className="h-5 w-5" />
+          </Link>
+        </Button>
         <ThemeToggle />
         <NotificationsMenu />
       </div>

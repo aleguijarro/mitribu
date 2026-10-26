@@ -10,7 +10,7 @@ export function VerifiedBadge({ className }: { className?: string }) {
       )}
     >
       <ShieldCheck className="h-3.5 w-3.5" />
-      Perfil verificado
+      Estudiante verificado
     </span>
   );
 }

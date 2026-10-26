@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { GraduationCap, MapPin, Settings } from "lucide-react";
+import { BadgeCheck, FileSignature, GraduationCap, MapPin, Plane, Settings } from "lucide-react";
 import { UserAvatar } from "@/components/shared/user-avatar";
 import { Rating } from "@/components/shared/rating";
 import { VerifiedBadge } from "@/components/shared/verified-badge";
@@ -30,17 +30,26 @@ export function ProfileHeader({ user, isOwnProfile }: { user: User; isOwnProfile
           </div>
           <div className="flex w-full gap-2 sm:w-auto">
             {isOwnProfile ? (
-              <Button asChild variant="outline" className="flex-1 sm:flex-none">
-                <Link href="/perfil/editar">
-                  <Settings className="h-4 w-4" /> Editar perfil
-                </Link>
-              </Button>
+              <>
+                {!user.verified && (
+                  <Button asChild className="flex-1 sm:flex-none">
+                    <Link href="/verificacion">
+                      <BadgeCheck className="h-4 w-4" /> Verificar perfil
+                    </Link>
+                  </Button>
+                )}
+                <Button asChild variant="outline" className="flex-1 sm:flex-none">
+                  <Link href="/perfil/editar">
+                    <Settings className="h-4 w-4" /> Editar perfil
+                  </Link>
+                </Button>
+              </>
             ) : (
               <>
                 <Button asChild className="flex-1 sm:flex-none">
                   <Link href="/mensajes">Enviar mensaje</Link>
                 </Button>
-                <MoreActionsMenu listingLabel="perfil" />
+                <MoreActionsMenu targetType="perfil" targetId={user.id} />
               </>
             )}
           </div>
@@ -58,8 +67,21 @@ export function ProfileHeader({ user, isOwnProfile }: { user: User; isOwnProfile
               </span>
             )}
             <Rating value={user.rating} reviewCount={user.reviewCount} />
+            {!!user.closedDeals && (
+              <span className="flex items-center gap-1.5">
+                <FileSignature className="h-4 w-4" /> {user.closedDeals} contratos cerrados
+              </span>
+            )}
             <span>Miembro desde {formatDate(user.memberSince)}</span>
           </div>
+          {user.exchange && (
+            <p className="flex items-center gap-1.5 text-sm">
+              <Plane className="h-4 w-4 text-primary" />
+              {user.exchange.direction === "llega" ? "De intercambio desde " : "Se va de intercambio a "}
+              <strong>{user.exchange.direction === "llega" ? user.exchange.homeUniversity : user.exchange.hostUniversity}</strong>
+              <span className="text-muted-foreground">· {user.exchange.period}</span>
+            </p>
+          )}
           {user.verified && <VerifiedBadge />}
         </div>
       </div>

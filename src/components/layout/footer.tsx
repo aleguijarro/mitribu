@@ -28,7 +28,8 @@ const columns = [
       { label: "Pisos", href: "/pisos" },
       { label: "Marketplace", href: "/marketplace" },
       { label: "Comunidad", href: "/comunidad" },
-      { label: "Mensajes", href: "/mensajes" },
+      { label: "Solicitudes", href: "/solicitudes" },
+      { label: "Precios", href: "/precios" },
     ],
   },
   {
@@ -43,6 +44,7 @@ const columns = [
     title: "Ayuda",
     links: [
       { label: "Centro de ayuda", href: "/soporte" },
+      { label: "Verificación", href: "/verificacion" },
       { label: "Seguridad", href: "/soporte#seguridad" },
       { label: "Reportar un problema", href: "/soporte#contacto" },
     ],
@@ -70,7 +72,7 @@ export function Footer() {
               <span className="text-lg font-bold tracking-tight">{siteConfig.name}</span>
             </Link>
             <p className="mt-4 max-w-xs text-sm text-muted-foreground">
-              Tu vida universitaria, en un solo lugar.
+              La red de los estudiantes de intercambio en España.
             </p>
             <div className="mt-5 flex items-center gap-3">
               <a
@@ -118,7 +120,7 @@ export function Footer() {
           ))}
         </div>
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row">
-          <p>© {new Date().getFullYear()} {siteConfig.name}. Hecho con 💚 para estudiantes.</p>
+          <p>© {new Date().getFullYear()} {siteConfig.name}. Hecho con 💚 para estudiantes de intercambio.</p>
           <p>Madrid · Barcelona · Valencia · Sevilla · Granada</p>
         </div>
       </div>

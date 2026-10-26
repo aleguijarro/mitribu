@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Home, ImagePlus, Paperclip, Send, ShoppingBag } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Home, ImagePlus, Lock, Paperclip, Send, ShoppingBag } from "lucide-react";
 import { UserAvatar } from "@/components/shared/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ import { currentUserId } from "@/data/current-user";
 import { properties } from "@/data/properties";
 import { products } from "@/data/products";
 import { communityPhoto } from "@/data/images";
+import { CONTACT_BLOCKED_NOTICE, filterContactInfo } from "@/lib/contact-filter";
 import { cn } from "@/lib/utils";
 
 export function ChatWindow({ conversationId, className }: { conversationId: string; className?: string }) {
@@ -47,7 +48,10 @@ export function ChatWindow({ conversationId, className }: { conversationId: stri
   function handleSend(e: React.FormEvent) {
     e.preventDefault();
     if (!draft.trim()) return;
-    sendMessage(conversationId, draft.trim());
+    // Reglas internas: sin solicitud aceptada, los datos de contacto se ocultan
+    const { text, blocked } = conversation!.contactUnlocked ? { text: draft.trim(), blocked: false } : filterContactInfo(draft.trim());
+    sendMessage(conversationId, text);
+    if (blocked) toast({ title: "Datos de contacto ocultos", description: CONTACT_BLOCKED_NOTICE });
     setDraft("");
   }
 
@@ -80,8 +84,25 @@ export function ChatWindow({ conversationId, className }: { conversationId: stri
       </header>
 
       <div className="flex-1 space-y-3 overflow-y-auto p-4">
+        <p className="mx-auto flex max-w-md items-start gap-2 rounded-xl bg-secondary px-3 py-2 text-xs text-muted-foreground">
+          {conversation.contactUnlocked ? (
+            <>
+              <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+              Solicitud aceptada: ya podéis compartir teléfono, email o redes.
+            </>
+          ) : (
+            <>
+              <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+              Teléfonos, emails, enlaces y redes se ocultan en este chat hasta que haya una solicitud aceptada.
+            </>
+          )}
+        </p>
         {conversation.messages.map((m) => (
-          <MessageBubble key={m.id} message={m} isOwn={m.senderId === currentUserId} />
+          <MessageBubble
+            key={m.id}
+            message={conversation.contactUnlocked || !m.text ? m : { ...m, text: filterContactInfo(m.text).text }}
+            isOwn={m.senderId === currentUserId}
+          />
         ))}
         <div ref={bottomRef} />
       </div>

@@ -7,6 +7,11 @@ export function formatPrice(amount: number, opts?: { suffix?: string }) {
   return `${formatted} €${opts?.suffix ? ` ${opts.suffix}` : ""}`;
 }
 
+/** Tarifas de MiTribu (0,99 €, 19,99 €...): siempre con dos decimales. */
+export function formatFee(amount: number) {
+  return `${new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount)} €`;
+}
+
 export function formatRelativeTime(iso: string): string {
   const date = new Date(iso);
   const now = new Date();

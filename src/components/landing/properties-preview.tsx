@@ -10,7 +10,7 @@ export function PropertiesPreview() {
     <section className="container py-16 sm:py-20">
       <SectionHeader
         title="Tu próximo hogar está aquí"
-        subtitle="Habitaciones, estudios y pisos completos verificados cerca de tu universidad."
+        subtitle="Habitaciones y pisos para tu semestre, de propietarios y estudiantes verificados."
         href="/pisos"
         hrefLabel="Ver todos los pisos"
       />

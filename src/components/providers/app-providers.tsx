@@ -10,6 +10,10 @@ import { NotificationsProvider } from "@/context/notifications-context";
 import { ChatProvider } from "@/context/chat-context";
 import { CommunityProvider } from "@/context/community-context";
 import { ListingsProvider } from "@/context/listings-context";
+import { RequestsProvider } from "@/context/requests-context";
+import { PlanProvider } from "@/context/plan-context";
+import { VerificationProvider } from "@/context/verification-context";
+import { ReportsProvider } from "@/context/reports-context";
 
 /** Compone todos los providers globales de la aplicación en un único punto. */
 export function AppProviders({ children }: { children: ReactNode }) {
@@ -21,10 +25,18 @@ export function AppProviders({ children }: { children: ReactNode }) {
             <ListingsProvider>
               <ChatProvider>
                 <CommunityProvider>
-                  <TooltipProvider delayDuration={200}>
-                    {children}
-                    <Toaster />
-                  </TooltipProvider>
+                  <VerificationProvider>
+                    <PlanProvider>
+                      <RequestsProvider>
+                        <ReportsProvider>
+                          <TooltipProvider delayDuration={200}>
+                            {children}
+                            <Toaster />
+                          </TooltipProvider>
+                        </ReportsProvider>
+                      </RequestsProvider>
+                    </PlanProvider>
+                  </VerificationProvider>
                 </CommunityProvider>
               </ChatProvider>
             </ListingsProvider>

@@ -10,13 +10,23 @@ interface ChatContextValue {
   conversations: Conversation[];
   getConversation: (id: string) => Conversation | undefined;
   sendMessage: (conversationId: string, text: string, attachment?: MessageAttachment) => void;
-  /** Encuentra (o crea) la conversación con otro usuario y opcionalmente envía un primer mensaje. Devuelve el id de la conversación. */
-  startConversation: (otherUserId: string, text?: string, attachment?: MessageAttachment) => string;
+  /**
+   * Encuentra (o crea) la conversación con otro usuario y opcionalmente envía un primer mensaje.
+   * `unlockContact` se usa al aceptar una solicitud: desde ahí se pueden compartir datos de contacto.
+   * Devuelve el id de la conversación.
+   */
+  startConversation: (
+    otherUserId: string,
+    text?: string,
+    attachment?: MessageAttachment,
+    opts?: { unlockContact?: boolean; senderId?: string }
+  ) => string;
 }
 
 interface ChatState {
   extraMessages: Message[];
   extraConversations: Conversation[];
+  unlockedConversationIds?: string[];
 }
 
 const initialState: ChatState = { extraMessages: [], extraConversations: [] };
@@ -34,7 +44,9 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const value = useMemo<ChatContextValue>(() => {
     const base = [...mockConversations, ...state.extraConversations];
 
-    const merged: Conversation[] = base.map((conv) => {
+    const unlocked = new Set(state.unlockedConversationIds ?? []);
+    const merged: Conversation[] = base.map((rawConv) => {
+      const conv = unlocked.has(rawConv.id) ? { ...rawConv, contactUnlocked: true } : rawConv;
       const extras = state.extraMessages.filter((m) => m.conversationId === conv.id);
       if (extras.length === 0) return conv;
       const lastExtra = extras[extras.length - 1];
@@ -62,7 +74,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       setState((prev) => ({ ...prev, extraMessages: [...prev.extraMessages, message] }));
     };
 
-    const startConversation = (otherUserId: string, text?: string, attachment?: MessageAttachment): string => {
+    const startConversation: ChatContextValue["startConversation"] = (otherUserId, text, attachment, opts) => {
       const existing = merged.find((c) => c.participantIds.includes(otherUserId));
       const conversationId = existing?.id ?? `local-conv-${otherUserId}-${Date.now()}`;
 
@@ -76,11 +88,18 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         setState((prev) => ({ ...prev, extraConversations: [...prev.extraConversations, newConversation] }));
       }
 
+      if (opts?.unlockContact) {
+        setState((prev) => ({
+          ...prev,
+          unlockedConversationIds: [...(prev.unlockedConversationIds ?? []), conversationId],
+        }));
+      }
+
       if (text || attachment) {
         const message: Message = {
           id: `local-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
           conversationId,
-          senderId: currentUserId,
+          senderId: opts?.senderId ?? currentUserId,
           text: text || undefined,
           attachment,
           createdAt: new Date().toISOString(),

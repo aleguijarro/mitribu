@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Heart, LifeBuoy, LogOut, Settings, User as UserIcon } from "lucide-react";
+import { BadgeCheck, Heart, Inbox, LifeBuoy, LogOut, Settings, Sparkles, User as UserIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -48,6 +48,21 @@ export function UserMenu() {
         <DropdownMenuItem asChild>
           <Link href="/perfil">
             <UserIcon className="h-4 w-4" /> Mi perfil
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/solicitudes">
+            <Inbox className="h-4 w-4" /> Solicitudes
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/verificacion">
+            <BadgeCheck className="h-4 w-4" /> Verificación
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/precios">
+            <Sparkles className="h-4 w-4" /> Plan y precios
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>

@@ -142,6 +142,7 @@ const avatarIndices: { gender: "women" | "men"; n: number }[] = [
   { gender: "men", n: 41 },
   { gender: "women", n: 58 },
   { gender: "men", n: 23 },
+  { gender: "women", n: 17 },
 ];
 
 export function avatarPhoto(i: number) {

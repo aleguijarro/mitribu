@@ -13,6 +13,16 @@ export type Interest =
   | "conocer-gente"
   | "vida-universitaria";
 
+/** "llega": estudiante que viene a España. "se-va": estudiante español que se va de intercambio. */
+export type ExchangeDirection = "llega" | "se-va";
+
+export interface ExchangeInfo {
+  direction: ExchangeDirection;
+  homeUniversity: string;
+  hostUniversity: string;
+  period: string; // p. ej. "Feb – Jul 2027"
+}
+
 export interface University {
   id: string;
   name: string;
@@ -38,6 +48,9 @@ export interface User {
   responseRate?: number;
   responseTime?: string;
   interests?: Interest[];
+  exchange?: ExchangeInfo;
+  /** Contratos firmados a través de MiTribu. Sube con cada cierre. */
+  closedDeals?: number;
 }
 
 export type PropertyType =
@@ -77,6 +90,8 @@ export interface Property {
   verified: boolean;
   featured?: boolean;
   createdAt: string;
+  /** Contrato firmado: el anuncio deja de aparecer en búsquedas. */
+  rented?: boolean;
 }
 
 export type ProductCondition =
@@ -158,6 +173,53 @@ export interface Conversation {
   messages: Message[];
   updatedAt: string;
   pinned?: boolean;
+  /** true cuando la solicitud se ha aceptado: ya se pueden compartir datos de contacto. */
+  contactUnlocked?: boolean;
+}
+
+/**
+ * Pipeline de alquiler:
+ * pendiente → (propietario acepta y paga 0,99 €) aceptada → (contrato firmado, 19,99 €) cerrada
+ */
+export type RequestStatus = "pendiente" | "aceptada" | "rechazada" | "cerrada";
+
+export interface HousingRequest {
+  id: string;
+  propertyId: string;
+  hostId: string;
+  applicantId: string;
+  message: string;
+  moveIn: string; // ISO date
+  months: number;
+  status: RequestStatus;
+  createdAt: string;
+  conversationId?: string;
+}
+
+export type VerificationMethod = "email-universitario" | "carnet" | "matricula";
+
+export interface VerificationState {
+  student?: { method: VerificationMethod; value: string; status: "en-revision" | "verificado" };
+  identity?: { document: "dni" | "nie" | "pasaporte"; status: "en-revision" | "verificado" };
+}
+
+export type PlanId = "gratis" | "semana" | "mes";
+
+export type ReportReason =
+  | "estafa"
+  | "anuncio-falso"
+  | "pide-pago-adelantado"
+  | "contenido-inapropiado"
+  | "suplantacion"
+  | "otro";
+
+export interface Report {
+  id: string;
+  targetType: "propiedad" | "producto" | "perfil" | "usuario" | "publicación";
+  targetId: string;
+  reason: ReportReason;
+  details: string;
+  createdAt: string;
 }
 
 export type NotificationType =
@@ -167,6 +229,7 @@ export type NotificationType =
   | "match-property"
   | "offer"
   | "review"
+  | "request"
   | "system";
 
 export interface AppNotification {

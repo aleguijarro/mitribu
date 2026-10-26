@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import Link from "next/link";
 import { notFound, useRouter } from "next/navigation";
 import { ChevronRight, MapPin, MessageCircle, Tag as TagIcon } from "lucide-react";
@@ -15,12 +15,14 @@ import { VerifiedBadge } from "@/components/shared/verified-badge";
 import { ReviewsList } from "@/components/shared/reviews-list";
 import { SectionHeader } from "@/components/shared/section-header";
 import { HorizontalScroller } from "@/components/shared/horizontal-scroller";
+import { UpgradeDialog } from "@/components/shared/upgrade-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useListings } from "@/context/listings-context";
 import { useChat } from "@/context/chat-context";
+import { usePlan } from "@/context/plan-context";
 import { useToast } from "@/hooks/use-toast";
 import { getUserById } from "@/data/users";
 import { getReviewsForUser } from "@/data/reviews";
@@ -31,9 +33,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   const { id } = use(params);
   const { products } = useListings();
   const product = products.find((p) => p.id === id);
-  const { startConversation } = useChat();
+  const { startConversation, conversations } = useChat();
+  const { spendContact, contactsLeft, isPremium, hasContacted } = usePlan();
   const { toast } = useToast();
   const router = useRouter();
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
 
   if (!product) notFound();
 
@@ -41,15 +45,26 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   const reviews = seller ? getReviewsForUser(seller.id).filter((r) => r.context === "producto") : [];
   const similar = products.filter((p) => p.id !== product.id && p.category === product.category).slice(0, 4);
 
+  // Si ya hay un chat abierto con el vendedor, escribirle no gasta contacto
+  const alreadyChatting = !!seller && (hasContacted(seller.id) || conversations.some((c) => c.participantIds.includes(seller.id)));
+
+  /** Prueba gratuita: contactar con un vendedor nuevo gasta 1 de los 3 contactos. */
+  function ensureContact() {
+    if (!seller) return false;
+    if (alreadyChatting || spendContact(seller.id)) return true;
+    setUpgradeOpen(true);
+    return false;
+  }
+
   function handleBuy() {
-    if (!seller) return;
+    if (!seller || !ensureContact()) return;
     const convId = startConversation(seller.id, `Me interesa: ${product!.title}`, { type: "product", refId: product!.id });
     toast({ title: "¡Perfecto! 🛍️", description: "Hemos avisado al vendedor de tu interés." });
     router.push(`/mensajes/${convId}`);
   }
 
   function handleMessage() {
-    if (!seller) return;
+    if (!seller || !ensureContact()) return;
     const convId = startConversation(seller.id, undefined, { type: "product", refId: product!.id });
     router.push(`/mensajes/${convId}`);
   }
@@ -80,7 +95,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <SaveButton id={product.id} kind="product" variant="inline" className="hidden sm:inline-flex" />
-              <MoreActionsMenu listingLabel="producto" />
+              <MoreActionsMenu targetType="producto" targetId={product.id} userId={product.sellerId} />
             </div>
           </div>
 
@@ -131,11 +146,18 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                   <Button size="lg" className="w-full" onClick={handleBuy}>
                     Comprar / Me interesa
                   </Button>
-                  <OfferDialog product={product} sellerId={seller.id} />
+                  <OfferDialog product={product} sellerId={seller.id} ensureContact={ensureContact} />
                   <Button size="lg" variant="outline" className="w-full" onClick={handleMessage}>
                     <MessageCircle className="h-4 w-4" /> Enviar mensaje
                   </Button>
                 </div>
+                <p className="mt-3 text-center text-xs text-muted-foreground">
+                  {isPremium
+                    ? "Premium: contactos ilimitados."
+                    : alreadyChatting
+                      ? "Ya has contactado con esta persona."
+                      : `Te quedan ${contactsLeft} contactos gratis.`}
+                </p>
               </CardContent>
             </Card>
           )}
@@ -152,6 +174,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           </HorizontalScroller>
         </section>
       )}
+
+      <UpgradeDialog open={upgradeOpen} onOpenChange={setUpgradeOpen} reason="contactos" />
 
       <div className="fixed inset-x-0 bottom-16 z-30 flex items-center justify-between gap-3 border-t border-border bg-card/95 px-4 py-3 backdrop-blur-xl sm:hidden">
         <p className="text-sm font-bold">{formatPrice(product.price)}</p>

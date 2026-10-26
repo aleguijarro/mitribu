@@ -1,9 +1,9 @@
-import { AlertTriangle, BadgeCheck, Flag, ShieldCheck, Star } from "lucide-react";
+import { AlertTriangle, BadgeCheck, Flag, Lock, ShieldCheck } from "lucide-react";
 import { scamSafetyTips } from "@/lib/constants";
 
 const pillars = [
-  { icon: BadgeCheck, title: "Perfiles verificados", description: "Email y, en muchos casos, identidad confirmada." },
-  { icon: Star, title: "Sistema de reputación", description: "Valoraciones reales de otros estudiantes tras cada trato." },
+  { icon: BadgeCheck, title: "Estudiantes verificados", description: "Email universitario o carnet, más DNI o pasaporte." },
+  { icon: Lock, title: "Contactos protegidos", description: "Teléfonos, emails y redes ocultos hasta que se acepta la solicitud." },
   { icon: Flag, title: "Reportes en 24h", description: "Denuncia anuncios o usuarios sospechosos en un clic." },
 ];
 
@@ -16,11 +16,11 @@ export function SecuritySection() {
             <ShieldCheck className="h-3.5 w-3.5" /> Seguridad y confianza
           </span>
           <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-            Comprar, alquilar y conocer gente, con tranquilidad
+            Alquilar a distancia, sin miedo a estafas
           </h2>
           <p className="mt-3 text-muted-foreground">
-            Tratar con otra persona a través de internet da respeto. Por eso MiTribu está construido, desde el primer
-            día, para que sepas con quién estás hablando.
+            Los alquileres para estudiantes que llegan desde otro país son el blanco favorito de las estafas. Por eso en
+            MiTribu todo el mundo está verificado y sabes siempre con quién hablas.
           </p>
           <div className="mt-8 grid gap-5 sm:grid-cols-3">
             {pillars.map((p) => (
