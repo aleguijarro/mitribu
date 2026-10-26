@@ -2,9 +2,12 @@
 
 > "Tu gente. Tu ciudad. Tu tribu."
 
-MiTribu es una plataforma social para estudiantes que combina en un único producto:
+MiTribu es la red social de los **estudiantes de intercambio en España**: como un grupo de
+Facebook de Erasmus, pero con todo el mundo verificado para evitar estafas. Conecta a quien
+**llega** a España (busca habitación y cosas) con quien **se va** de intercambio (deja su
+habitación y vende lo que no se lleva). Combina en un único producto:
 
-- 🏠 Marketplace de propiedades/alojamiento (estilo Airbnb, orientado a estudiantes)
+- 🏠 Alojamiento con pipeline de solicitudes (ver §6 bis)
 - 🛍️ Marketplace de productos entre estudiantes (libros, muebles, tecnología...)
 - 👥 Comunidad / red social
 - 💬 Mensajería tipo chat
@@ -178,11 +181,61 @@ de los contextos en `src/context/`:
 - `ChatProvider` → conversaciones y mensajes nuevos
 - `CommunityProvider` → likes, comentarios y publicaciones nuevas en Comunidad
 - `NotificationsProvider` → estado de leído/no leído
-- `AuthProvider` → sesión simulada y datos del onboarding
+- `AuthProvider` → sesión simulada y datos del onboarding (incluye si el usuario llega o se va)
+- `RequestsProvider` → solicitudes de alojamiento y su estado
+- `VerificationProvider` → verificación de estudiante e identidad
+- `PlanProvider` → plan del estudiante (prueba gratuita / Premium) y contactos usados
+- `ReportsProvider` → reportes de anuncios y usuarios
 
 Cada contexto expone una API sencilla (`addProperty()`, `toggleFavorite()`, `sendMessage()`...)
 pensada para sustituirse por llamadas `fetch`/`server actions` a una API real sin tener que
 tocar los componentes que los consumen.
+
+---
+
+## 6 bis. Modelo de producto (planificación de octubre)
+
+### Pipeline de alojamiento (`/solicitudes`, `src/context/requests-context.tsx`)
+
+1. El estudiante (verificado) envía una solicitud desde la ficha del piso.
+2. El propietario la ve **gratis**: perfil, universidad de origen y destino, fechas y mensaje.
+3. Si le interesa, la acepta → paga **0,99 €** → se abre el chat con los contactos desbloqueados.
+4. Hablan libremente y pueden pasar a WhatsApp, teléfono, email...
+5. Si cierran, el propietario marca **contrato firmado** → **19,99 €** → el anuncio se retira
+   y el resto de solicitudes pendientes se descartan.
+6. El cierre suma a la reputación del propietario (`closedDeals`).
+
+### Reglas internas (`src/lib/contact-filter.ts`)
+
+Hasta que se acepta la solicitud se detectan y ocultan teléfonos, emails, URLs, Instagram,
+WhatsApp y Telegram, y se muestra: _"🔒 Por seguridad, los datos de contacto deben
+compartirse después de que la solicitud sea aceptada."_ Se aplica a solicitudes, chats sin
+solicitud aceptada y títulos/descripciones de anuncios. El backend debe repetir el filtro.
+
+### Verificación (`/verificacion`)
+
+- Estudiante: email universitario, carnet o certificado de matrícula.
+- Identidad: DNI, NIE o pasaporte.
+- Es obligatoria para enviar y aceptar solicitudes. Hoy se aprueba sola a los 3,5 s (demo).
+
+### Monetización (`src/lib/constants.ts` → `pricing`, `/precios`)
+
+| Quién | Concepto | Precio |
+| --- | --- | --- |
+| Publica | Publicar anuncio | Gratis |
+| Publica | Aceptar una solicitud (lead) | 0,99 € |
+| Publica | Contrato firmado | 19,99 € |
+| Busca | Prueba gratuita: búsqueda ilimitada, 5 guardados, 3 contactos | 0 € |
+| Busca | Premium semanal / mensual (renovación automática, cancelable) | 4,99 € / 9,99 € |
+| Busca | Obtener contacto YA (un contacto suelto) | 1,99 € |
+
+Todos los cobros son **simulados** (`PaymentDialog`): no hay pasarela de pago todavía.
+
+> ⚠️ Pendiente de validar con un abogado: según la Ley 12/2023 los gastos de gestión
+> inmobiliaria no pueden repercutirse al inquilino en alquiler de vivienda habitual. Cobrar al
+> propietario sí es habitual; cobrar al estudiante (Premium, contactos) encaja mejor en
+> alquiler de temporada o por habitaciones (Código Civil) o como servicio que el estudiante
+> contrata por iniciativa propia. Revisar antes de activar cobros reales.
 
 ---
 
@@ -248,5 +301,7 @@ un VPS con `npm run build && npm run start`, Docker...).
 - [ ] Subida de imágenes real
 - [ ] Mapa interactivo real (Mapbox/Google Maps)
 - [ ] Notificaciones push / email
-- [ ] Panel de moderación para reportes
-- [ ] Pagos y verificación de identidad
+- [ ] Panel de moderación para reportes (hoy los reportes se guardan en `localStorage`)
+- [ ] Pagos reales con Stripe (hoy simulados en `PaymentDialog`)
+- [ ] Verificación real de estudiante e identidad (proveedor KYC + RGPD)
+- [ ] Filtro de datos de contacto también en el servidor

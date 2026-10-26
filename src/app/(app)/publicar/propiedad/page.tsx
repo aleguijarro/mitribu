@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Lock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +13,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PhotoUpload } from "@/components/publish/photo-upload";
 import { PublishSuccess } from "@/components/publish/publish-success";
 import { useListings } from "@/context/listings-context";
-import { amenitiesList, cities, propertyTypes, universities } from "@/lib/constants";
+import { amenitiesList, cities, pricing, propertyTypes, universities } from "@/lib/constants";
+import { CONTACT_BLOCKED_NOTICE, filterContactInfo } from "@/lib/contact-filter";
+import { formatFee } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { PropertyType } from "@/types";
 
@@ -52,8 +55,8 @@ export default function PublicarPropiedadPage() {
     e.preventDefault();
 
     const property = addProperty({
-      title: form.title,
-      description: form.description,
+      title: filterContactInfo(form.title).text,
+      description: filterContactInfo(form.description).text,
       images: [0, 1, 2, 3].map((i) => `https://images.unsplash.com/photo-${["1502672260266-1c1ef2d93688", "1522708323590-d24dbb6b0267", "1484154218962-a197022b5858", "1493809842364-78817add7ffb"][i]}?w=1200&q=80&auto=format&fit=crop`),
       price: Number(form.price) || 0,
       city: form.city,
@@ -80,7 +83,14 @@ export default function PublicarPropiedadPage() {
   return (
     <div className="container max-w-2xl py-8 sm:py-10">
       <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Publicar propiedad</h1>
-      <p className="mt-1 text-muted-foreground">Encuentra a tu próximo inquilino o compañero/a de piso.</p>
+      <p className="mt-1 text-muted-foreground">
+        ¿Te vas de intercambio o alquilas a estudiantes? Encuentra a quien llega. Publicar es gratis.
+      </p>
+      <div className="mt-4 rounded-xl border border-border bg-secondary p-4 text-sm text-muted-foreground">
+        Recibirás solicitudes de estudiantes verificados y podrás verlas gratis. Solo pagas{" "}
+        <strong className="text-foreground">{formatFee(pricing.acceptLead)}</strong> si aceptas una (se abre el chat) y{" "}
+        <strong className="text-foreground">{formatFee(pricing.contractSigned)}</strong> cuando firméis el contrato.
+      </div>
 
       <Card className="mt-6">
         <CardHeader>
@@ -229,10 +239,15 @@ export default function PublicarPropiedadPage() {
                 id="description"
                 required
                 className="min-h-32"
-                placeholder="Describe el ambiente, tus compañeros de piso, el barrio..."
+                placeholder="Describe el ambiente, tus compañeros de piso, el barrio, si te vas de intercambio y qué dejas..."
                 value={form.description}
                 onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
               />
+              {filterContactInfo(form.description).blocked && (
+                <p className="flex gap-2 rounded-lg bg-coral/10 px-3 py-2 text-xs text-coral">
+                  <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0" /> {CONTACT_BLOCKED_NOTICE} Lo ocultaremos al publicar.
+                </p>
+              )}
             </div>
 
             <Button type="submit" size="lg" className="mt-2">

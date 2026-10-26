@@ -34,7 +34,10 @@ export default function InicioPage() {
 
   const newest = [...properties].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 8);
 
-  const popularProducts = [...products].sort((a, b) => b.price - a.price).slice(0, 3).concat(products.slice(3, 10));
+  // Los 3 más caros primero y después el resto, sin repetir: antes se concatenaba
+  // `products.slice(3, 10)` y un producto podía salir dos veces (claves duplicadas).
+  const topByPrice = [...products].sort((a, b) => b.price - a.price).slice(0, 3);
+  const popularProducts = [...topByPrice, ...products.filter((p) => !topByPrice.includes(p))].slice(0, 10);
 
   return (
     <div className="container py-8 sm:py-10">
@@ -92,9 +95,9 @@ export default function InicioPage() {
 
       <section className="mt-12 overflow-hidden rounded-3xl bg-tribu-gradient px-6 py-10 text-center sm:px-10">
         <Sparkles className="mx-auto h-7 w-7 text-primary-foreground" />
-        <h2 className="mt-3 text-xl font-bold text-primary-foreground sm:text-2xl">¿Tienes algo que ya no usas?</h2>
+        <h2 className="mt-3 text-xl font-bold text-primary-foreground sm:text-2xl">¿Te vas de intercambio?</h2>
         <p className="mx-auto mt-1.5 max-w-sm text-sm text-primary-foreground/85">
-          Publicarlo en MiTribu te lleva menos de dos minutos y le puede cambiar el mes a otro estudiante.
+          Deja tu habitación y lo que no te llevas a quien llega. Publicar es gratis y ver las solicitudes, también.
         </p>
         <Button asChild size="lg" variant="secondary" className="mt-5 bg-white text-primary-700 hover:bg-white/90">
           <Link href="/publicar">Publicar ahora</Link>

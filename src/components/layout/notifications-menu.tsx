@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, Heart, MessageCircle, Home, Tag, Star, Info } from "lucide-react";
+import { Bell, Heart, MessageCircle, Home, Tag, Star, Info, Inbox } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +20,7 @@ const iconByType: Record<NotificationType, React.ElementType> = {
   "match-property": Home,
   offer: Tag,
   review: Star,
+  request: Inbox,
   system: Info,
 };
 

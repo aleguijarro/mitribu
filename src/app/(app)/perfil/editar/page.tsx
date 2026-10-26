@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ShieldCheck } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -114,20 +115,16 @@ export default function EditProfilePage() {
             <div className="flex items-center gap-3 rounded-xl border border-border bg-secondary p-4">
               <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
               <div className="flex-1 text-sm">
-                <p className="font-medium">{user.emailVerified ? "Tu email está verificado" : "Verifica tu email"}</p>
-                <p className="text-muted-foreground">Los perfiles verificados reciben más respuestas.</p>
+                <p className="font-medium">{user.verified ? "Estudiante verificado" : "Verifica tu perfil"}</p>
+                <p className="text-muted-foreground">
+                  {user.verified
+                    ? "Ya puedes enviar y aceptar solicitudes."
+                    : "Necesario para enviar y aceptar solicitudes: email universitario o carnet, y DNI o pasaporte."}
+                </p>
               </div>
-              {!user.emailVerified && (
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  onClick={() => {
-                    updateProfile({ emailVerified: true });
-                    toast({ title: "Email verificado ✓", description: "Tu perfil ahora es más fiable para el resto de la tribu." });
-                  }}
-                >
-                  Verificar
+              {!user.verified && (
+                <Button type="button" size="sm" variant="outline" asChild>
+                  <Link href="/verificacion">Verificar</Link>
                 </Button>
               )}
             </div>

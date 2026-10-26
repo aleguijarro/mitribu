@@ -12,7 +12,7 @@ export function FinalCta() {
           Tu gente. Tu ciudad. Tu tribu.
         </h2>
         <p className="relative mx-auto mt-3 max-w-md text-primary-foreground/85">
-          Únete gratis y empieza a descubrir pisos, artículos y gente cerca de ti hoy mismo.
+          Crea tu cuenta gratis, verifícate en dos minutos y empieza a buscar o publicar hoy mismo.
         </p>
         <div className="relative mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Button size="lg" variant="secondary" asChild className="bg-white text-primary-700 hover:bg-white/90">

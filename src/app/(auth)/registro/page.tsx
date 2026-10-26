@@ -25,7 +25,9 @@ export default function RegistroPage() {
       <Card className="shadow-elevated">
         <CardHeader className="items-center text-center">
           <h1 className="text-2xl font-bold tracking-tight">Bienvenido a tu nueva tribu</h1>
-          <p className="text-sm text-muted-foreground">Crea tu cuenta gratis en menos de un minuto.</p>
+          <p className="text-sm text-muted-foreground">
+            Crea tu cuenta gratis. Si usas tu email universitario, ya tienes medio camino de la verificación hecho.
+          </p>
         </CardHeader>
         <CardContent>
           <div className="grid gap-3">
@@ -49,8 +51,8 @@ export default function RegistroPage() {
               <Input id="name" placeholder="Tu nombre y apellido" required />
             </div>
             <div className="grid gap-1.5">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="tunombre@universidad.es" required />
+              <Label htmlFor="email">Email (mejor el de tu universidad)</Label>
+              <Input id="email" type="email" placeholder="tunombre@alumnos.universidad.es" required />
             </div>
             <div className="grid gap-1.5">
               <Label htmlFor="password">Contraseña</Label>

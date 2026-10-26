@@ -5,7 +5,7 @@ import {
   ShoppingBag,
   Users,
   MessageCircle,
-  LifeBuoy,
+  Inbox,
   PlusCircle,
   User,
   BookOpen,
@@ -30,7 +30,7 @@ export const siteConfig = {
   name: "MiTribu",
   tagline: "Tu gente. Tu ciudad. Tu tribu.",
   description:
-    "MiTribu conecta a estudiantes para encontrar piso, comprar y vender cosas y descubrir gente cerca de ti.",
+    "La red social de los estudiantes de intercambio en España: perfiles verificados para encontrar habitación, comprar y vender cosas y conocer gente sin estafas.",
   url: "https://mitribu.app",
   social: {
     instagram: "https://instagram.com/mitribu",
@@ -51,8 +51,8 @@ export const mainNav: NavItem[] = [
   { label: "Pisos", href: "/pisos", icon: Home },
   { label: "Marketplace", href: "/marketplace", icon: ShoppingBag },
   { label: "Comunidad", href: "/comunidad", icon: Users },
+  { label: "Solicitudes", href: "/solicitudes", icon: Inbox },
   { label: "Mensajes", href: "/mensajes", icon: MessageCircle },
-  { label: "Soporte", href: "/soporte", icon: LifeBuoy },
 ];
 
 /** Navegación inferior de móvil (estilo app nativa). */
@@ -156,6 +156,46 @@ export const amenitiesList = [
   "Se admiten mascotas",
 ];
 
+/**
+ * Monetización (ver README → "Modelo de negocio").
+ * Propietario/vendedor: publicar gratis, 0,99 € por solicitud aceptada y
+ * 19,99 € al firmar el contrato. Estudiante que busca: prueba gratuita
+ * con límites, Premium semanal o mensual, o un contacto suelto.
+ */
+export const pricing = {
+  acceptLead: 0.99,
+  contractSigned: 19.99,
+  singleContact: 1.99,
+  weekPlan: 4.99,
+  monthPlan: 9.99,
+} as const;
+
+export const freePlanLimits = {
+  savedListings: 5,
+  contacts: 3,
+} as const;
+
+export const planDetails = {
+  gratis: { name: "Prueba gratuita", price: 0, period: "" },
+  semana: { name: "Premium semanal", price: pricing.weekPlan, period: "semana" },
+  mes: { name: "Premium mensual", price: pricing.monthPlan, period: "mes" },
+} as const;
+
+export const exchangeDirectionOptions = [
+  {
+    id: "llega",
+    label: "Llego a España de intercambio",
+    description: "Busco habitación, cosas para el piso y gente con la que empezar.",
+    emoji: "🛬",
+  },
+  {
+    id: "se-va",
+    label: "Me voy de intercambio",
+    description: "Quiero dejar mi habitación y vender lo que no me llevo.",
+    emoji: "🛫",
+  },
+] as const;
+
 export const interestOptions: { id: string; label: string; emoji: string }[] = [
   { id: "alojamiento", label: "Encontrar alojamiento", emoji: "🏠" },
   { id: "comprar-vender", label: "Comprar/vender", emoji: "🛍️" },
@@ -165,8 +205,8 @@ export const interestOptions: { id: string; label: string; emoji: string }[] = [
 
 export const scamSafetyTips = [
   "Nunca pagues una reserva o señal antes de ver el piso en persona o por videollamada.",
-  "Desconfía de propietarios que solo se comunican por WhatsApp y evitan las llamadas.",
-  "Usa siempre la mensajería de MiTribu hasta estar seguro: queda constancia de la conversación.",
+  "Desconfía de quien te pida pasar a WhatsApp antes de aceptar tu solicitud: en MiTribu los datos de contacto se desbloquean al aceptarla.",
+  "Comprueba que el perfil tiene la insignia de estudiante o identidad verificada.",
   "Si un precio parece demasiado bueno para ser verdad, probablemente lo sea.",
   "Comprueba las valoraciones y la antigüedad del perfil antes de cerrar un trato.",
 ];

@@ -13,11 +13,12 @@ import {
   PawPrint,
   Sofa,
   ChevronRight,
+  CheckCircle2,
 } from "lucide-react";
 import { PropertyGallery } from "@/components/properties/property-gallery";
 import { MapPlaceholder } from "@/components/properties/map-placeholder";
 import { PropertyCard } from "@/components/properties/property-card";
-import { ContactCard } from "@/components/shared/contact-card";
+import { RequestCard } from "@/components/properties/request-card";
 import { ReviewsList } from "@/components/shared/reviews-list";
 import { SaveButton } from "@/components/shared/save-button";
 import { MoreActionsMenu } from "@/components/shared/more-actions-menu";
@@ -35,8 +36,8 @@ import { formatDate, formatPrice } from "@/lib/format";
 
 export default function PropertyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { properties } = useListings();
-  const property = properties.find((p) => p.id === id);
+  const { properties, getProperty } = useListings();
+  const property = getProperty(id);
 
   if (!property) notFound();
 
@@ -81,9 +82,16 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <SaveButton id={property.id} kind="property" variant="inline" className="hidden sm:inline-flex" />
-          <MoreActionsMenu listingLabel="propiedad" />
+          <MoreActionsMenu targetType="propiedad" targetId={property.id} userId={property.hostId} />
         </div>
       </div>
+
+      {property.rented && (
+        <div className="mt-5 flex items-center gap-2.5 rounded-xl border border-border bg-secondary px-4 py-3 text-sm">
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+          Contrato firmado a través de MiTribu. Este anuncio ya no aparece en las búsquedas.
+        </div>
+      )}
 
       <div className="mt-6">
         <PropertyGallery images={property.images} title={property.title} />
@@ -100,7 +108,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
             </div>
             {host && (
               <Link href={`/perfil/${host.username}`} className="text-right text-sm">
-                <p className="text-muted-foreground">Anfitrión/a</p>
+                <p className="text-muted-foreground">Propietario/a</p>
                 <p className="font-semibold hover:underline">{host.name}</p>
               </Link>
             )}
@@ -166,7 +174,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
           )}
         </div>
 
-        <div>{host && <ContactCard user={host} roleLabel="Anfitrión/a" greeting={`Me interesa: ${property.title}`} attachment={{ type: "property", refId: property.id }} />}</div>
+        <div>{host && <RequestCard property={property} host={host} />}</div>
       </div>
 
       {similar.length > 0 && (

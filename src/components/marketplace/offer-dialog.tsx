@@ -20,7 +20,14 @@ import { useToast } from "@/hooks/use-toast";
 import { formatPrice } from "@/lib/format";
 import type { Product } from "@/types";
 
-export function OfferDialog({ product, sellerId }: { product: Product; sellerId: string }) {
+interface OfferDialogProps {
+  product: Product;
+  sellerId: string;
+  /** Comprueba (y gasta) un contacto del plan antes de enviar. Devuelve false si no quedan. */
+  ensureContact?: () => boolean;
+}
+
+export function OfferDialog({ product, sellerId, ensureContact }: OfferDialogProps) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState(Math.round(product.price * 0.85));
   const { startConversation } = useChat();
@@ -29,6 +36,10 @@ export function OfferDialog({ product, sellerId }: { product: Product; sellerId:
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (ensureContact && !ensureContact()) {
+      setOpen(false);
+      return;
+    }
     const id = startConversation(sellerId, undefined, { type: "offer", offerAmount: amount, refId: product.id });
     setOpen(false);
     toast({ title: "Oferta enviada 🏷️", description: `Le has ofrecido ${formatPrice(amount)} al vendedor.` });

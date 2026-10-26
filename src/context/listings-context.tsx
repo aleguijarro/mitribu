@@ -15,7 +15,11 @@ type NewPropertyInput = Omit<
 type NewProductInput = Omit<Product, "id" | "sellerId" | "createdAt" | "currency">;
 
 interface ListingsContextValue {
+  /** Propiedades activas (sin las que ya tienen contrato firmado). */
   properties: Property[];
+  /** Busca también entre las alquiladas, para poder mostrar su ficha. */
+  getProperty: (id: string) => Property | undefined;
+  markPropertyRented: (id: string) => void;
   products: Product[];
   addProperty: (input: NewPropertyInput) => Property;
   addProduct: (input: NewProductInput) => Product;
@@ -24,9 +28,10 @@ interface ListingsContextValue {
 interface ListingsState {
   extraProperties: Property[];
   extraProducts: Product[];
+  rentedPropertyIds?: string[];
 }
 
-const initialState: ListingsState = { extraProperties: [], extraProducts: [] };
+const initialState: ListingsState = { extraProperties: [], extraProducts: [], rentedPropertyIds: [] };
 
 const ListingsContext = createContext<ListingsContextValue | null>(null);
 
@@ -39,7 +44,14 @@ export function ListingsProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useLocalStorage<ListingsState>("mitribu:listings", initialState);
 
   const value = useMemo<ListingsContextValue>(() => {
-    const properties = [...state.extraProperties, ...mockProperties];
+    const rented = new Set(state.rentedPropertyIds ?? []);
+    const allProperties = [...state.extraProperties, ...mockProperties].map((p) =>
+      rented.has(p.id) ? { ...p, rented: true } : p
+    );
+    const properties = allProperties.filter((p) => !p.rented);
+    const getProperty = (id: string) => allProperties.find((p) => p.id === id);
+    const markPropertyRented = (id: string) =>
+      setState((prev) => ({ ...prev, rentedPropertyIds: [...(prev.rentedPropertyIds ?? []), id] }));
     const products = [...state.extraProducts, ...mockProducts];
 
     const addProperty = (input: NewPropertyInput): Property => {
@@ -71,7 +83,7 @@ export function ListingsProvider({ children }: { children: ReactNode }) {
       return product;
     };
 
-    return { properties, products, addProperty, addProduct };
+    return { properties, getProperty, markPropertyRented, products, addProperty, addProduct };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 

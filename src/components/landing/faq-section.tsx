@@ -1,7 +1,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { faqs } from "@/data/support";
 
-const landingFaqIds = ["f3", "f4", "f5", "f9", "f7", "f10"];
+const landingFaqIds = ["f14", "f4", "f1", "f13", "f15", "f7"];
 
 export function FaqSection() {
   const selected = landingFaqIds.map((id) => faqs.find((f) => f.id === id)).filter(Boolean);

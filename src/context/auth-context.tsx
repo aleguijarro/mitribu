@@ -2,9 +2,10 @@
 
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import type { Interest } from "@/types";
+import type { ExchangeDirection, Interest } from "@/types";
 
 export interface OnboardingData {
+  direction?: ExchangeDirection;
   city?: string;
   university?: string;
   interests: Interest[];

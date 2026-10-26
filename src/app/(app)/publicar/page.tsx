@@ -6,13 +6,13 @@ const options = [
     href: "/publicar/propiedad",
     icon: Home,
     title: "Propiedad",
-    description: "Publica una habitación, estudio o piso completo para estudiantes.",
+    description: "¿Te vas de intercambio? Deja tu habitación a un estudiante verificado que llega.",
   },
   {
     href: "/publicar/producto",
     icon: ShoppingBag,
     title: "Producto",
-    description: "Vende libros, muebles, tecnología o cualquier cosa que ya no uses.",
+    description: "Vende la bici, los muebles o los libros que no te llevas. Es gratis.",
   },
 ];
 
@@ -20,7 +20,7 @@ export default function PublicarPage() {
   return (
     <div className="container flex min-h-[70vh] flex-col items-center justify-center py-12 text-center">
       <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">¿Qué quieres publicar?</h1>
-      <p className="mt-2 max-w-sm text-muted-foreground">Elige una opción y estarás publicando en menos de dos minutos.</p>
+      <p className="mt-2 max-w-sm text-muted-foreground">Publicar es gratis y te lleva menos de dos minutos.</p>
 
       <div className="mt-10 grid w-full max-w-2xl gap-5 sm:grid-cols-2">
         {options.map((opt) => (

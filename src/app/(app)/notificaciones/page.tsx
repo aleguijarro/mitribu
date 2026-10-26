@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, Heart, Home, Info, MessageCircle, Star, Tag } from "lucide-react";
+import { Bell, Heart, Home, Inbox, Info, MessageCircle, Star, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/shared/empty-state";
 import { useNotifications } from "@/context/notifications-context";
@@ -16,6 +16,7 @@ const iconByType: Record<NotificationType, React.ElementType> = {
   "match-property": Home,
   offer: Tag,
   review: Star,
+  request: Inbox,
   system: Info,
 };
 

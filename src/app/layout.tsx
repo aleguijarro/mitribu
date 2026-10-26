@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: [
+    "erasmus españa",
+    "estudiantes de intercambio",
+    "habitación erasmus",
     "pisos para estudiantes",
     "alojamiento universitario",
     "marketplace estudiantes",

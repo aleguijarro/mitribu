@@ -11,6 +11,7 @@ export const conversations: Conversation[] = [
     participantIds: [currentUserId, "u4"],
     updatedAt: "2026-09-10T09:32:00",
     pinned: true,
+    contactUnlocked: true,
     messages: [
       {
         id: "msg1",
@@ -112,6 +113,7 @@ export const conversations: Conversation[] = [
   {
     id: "conv3",
     participantIds: [currentUserId, "u11"],
+    contactUnlocked: true,
     updatedAt: "2026-09-08T13:05:00",
     messages: [
       {

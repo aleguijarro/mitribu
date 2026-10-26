@@ -13,6 +13,7 @@ const links = [
   { label: "Pisos", href: "/pisos" },
   { label: "Marketplace", href: "/marketplace" },
   { label: "Comunidad", href: "/comunidad" },
+  { label: "Precios", href: "/precios" },
 ];
 
 export function LandingHeader() {

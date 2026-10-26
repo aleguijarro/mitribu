@@ -1,5 +1,6 @@
 import { LandingHeader } from "@/components/landing/landing-header";
 import { Hero } from "@/components/landing/hero";
+import { HowItWorks } from "@/components/landing/how-it-works";
 import { PropertiesPreview } from "@/components/landing/properties-preview";
 import { MarketplacePreview } from "@/components/landing/marketplace-preview";
 import { CommunityPreview } from "@/components/landing/community-preview";
@@ -16,6 +17,7 @@ export default function LandingPage() {
       <LandingHeader />
       <main className="flex-1">
         <Hero />
+        <HowItWorks />
         <PropertiesPreview />
         <MarketplacePreview />
         <Benefits />

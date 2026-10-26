@@ -2,6 +2,26 @@ import type { AppNotification } from "@/types";
 
 export const notifications: AppNotification[] = [
   {
+    id: "n-r2",
+    type: "request",
+    actorId: "u14",
+    title: "Nueva solicitud para tu habitación",
+    description: "Luca Bianchi (Politecnico di Milano) quiere tu habitación de Argüelles desde el 28 de enero. Verla es gratis.",
+    createdAt: "2026-10-25T10:05:00",
+    read: false,
+    href: "/solicitudes",
+  },
+  {
+    id: "n-r1",
+    type: "request",
+    actorId: "u13",
+    title: "Nueva solicitud para tu habitación",
+    description: "Emma Schneider (LMU München) quiere tu habitación de Argüelles de febrero a julio.",
+    createdAt: "2026-10-24T18:20:00",
+    read: false,
+    href: "/solicitudes",
+  },
+  {
     id: "n1",
     type: "like",
     actorId: "u11",
@@ -63,11 +83,11 @@ export const notifications: AppNotification[] = [
   {
     id: "n7",
     type: "system",
-    title: "Verifica tu email para más confianza",
-    description: "Los perfiles verificados reciben un 3x más de respuestas. Verifica tu correo en un clic.",
+    title: "Verifica que eres estudiante",
+    description: "Con tu email universitario o tu carnet y tu DNI/pasaporte podrás enviar y aceptar solicitudes.",
     createdAt: "2026-09-07T10:00:00",
     read: true,
-    href: "/perfil/editar",
+    href: "/verificacion",
   },
   {
     id: "n8",

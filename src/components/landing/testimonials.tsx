@@ -4,19 +4,19 @@ import { getUserById } from "@/data/users";
 
 const testimonials = [
   {
+    userId: "u13",
+    quote:
+      "Buscaba habitación desde Múnich y me daba pánico que me estafaran. Aquí sé que la persona del otro lado es estudiante de verdad.",
+  },
+  {
     userId: "u1",
     quote:
-      "Encontré mi habitación en Malasaña en menos de una semana y pude ver todas las fotos y hablar con la anfitriona antes de decidir nada. Súper fácil.",
+      "Me voy a Milán y no quería pagar el piso vacío seis meses. Vi las solicitudes gratis y elegí a quien más encajaba con mis compañeras.",
   },
   {
     userId: "u3",
     quote:
-      "Llegué de Erasmus sin conocer a nadie y gracias a la Comunidad ya tenía plan la primera semana. Ahora vivo con gente que conocí ahí.",
-  },
-  {
-    userId: "u2",
-    quote:
-      "Vendí mi monitor y mi PS5 en un fin de semana. El chat con ofertas hace que negociar sea la mitad de incómodo que por otras apps.",
+      "Llegué de Lisboa sin conocer a nadie y en la Comunidad ya tenía plan la primera semana. La bici y el escritorio, del Marketplace.",
   },
 ];
 
@@ -24,8 +24,8 @@ export function Testimonials() {
   return (
     <section className="container py-16 sm:py-20">
       <div className="mx-auto max-w-2xl text-center">
-        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Lo que dice nuestra tribu</h2>
-        <p className="mt-3 text-muted-foreground">Historias reales de estudiantes que ya encontraron su sitio.</p>
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Así se vive un intercambio con MiTribu</h2>
+        <p className="mt-3 text-muted-foreground">Ejemplos de cómo lo usan quienes llegan y quienes se van.</p>
       </div>
       <div className="mt-12 grid gap-6 md:grid-cols-3">
         {testimonials.map((t) => {

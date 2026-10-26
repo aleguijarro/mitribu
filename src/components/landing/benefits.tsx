@@ -1,35 +1,35 @@
-import { Home, MessageCircle, ShieldCheck, Sparkles, Tag, Users } from "lucide-react";
+import { FileX, Home, Repeat, ShieldCheck, Tag, Users } from "lucide-react";
 
 const benefits = [
   {
     icon: Home,
-    title: "Alojamiento sin sustos",
-    description: "Filtra por distancia a tu universidad, precio y ambiente. Cada piso tiene reseñas reales de estudiantes.",
+    title: "Pensado para un semestre",
+    description: "Llegas sin nómina, sin aval y desde otro país. Aquí los anuncios son para estancias de intercambio, cerca de tu universidad.",
   },
   {
-    icon: Tag,
-    title: "Ahorra en todo",
-    description: "Compra y vende libros, muebles y tecnología de segunda mano entre gente de tu propia ciudad.",
-  },
-  {
-    icon: Users,
-    title: "Tu gente, cerca de ti",
-    description: "Conecta con estudiantes de tu universidad, resuelve dudas y haz planes desde el primer día.",
-  },
-  {
-    icon: MessageCircle,
-    title: "Todo en un chat",
-    description: "Negocia, pregunta y comparte anuncios sin salir de MiTribu. Queda todo registrado.",
+    icon: FileX,
+    title: "Sin papeleo previo",
+    description: "Persona a persona, sin agencias ni trámites antes de hablar. El propietario ve tu perfil y decide.",
   },
   {
     icon: ShieldCheck,
-    title: "Confianza real",
-    description: "Perfiles verificados, valoraciones y un equipo que revisa cada reporte en menos de 24h.",
+    title: "Solo gente verificada",
+    description: "Email universitario o carnet, y DNI o pasaporte. Reputación que sube con cada contrato cerrado.",
   },
   {
-    icon: Sparkles,
-    title: "Siempre algo nuevo",
-    description: "Un feed que aprende de lo que buscas para no dejarte pasar la oportunidad perfecta.",
+    icon: Repeat,
+    title: "El relevo del intercambio",
+    description: "Quien se va deja su habitación, sus muebles y sus contactos a quien llega. Todos salís ganando.",
+  },
+  {
+    icon: Tag,
+    title: "Marketplace de estudiantes",
+    description: "Bicis, muebles, libros, móviles y entradas de eventos entre gente de tu misma ciudad.",
+  },
+  {
+    icon: Users,
+    title: "Tu gente desde el día uno",
+    description: "Conoce a otros estudiantes de intercambio de tu ciudad, resuelve dudas y haz planes al llegar.",
   },
 ];
 
@@ -37,9 +37,9 @@ export function Benefits() {
   return (
     <section className="container py-16 sm:py-20">
       <div className="mx-auto max-w-2xl text-center">
-        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Todo lo que necesitas, en un solo sitio</h2>
+        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Como un grupo de Facebook, pero sin estafas</h2>
         <p className="mt-3 text-muted-foreground">
-          Encuentra. Conecta. Comparte. MiTribu reúne todo lo que necesitas para tu vida de estudiante.
+          Casa, cosas y gente para tu intercambio en España, en un solo sitio y con todo el mundo verificado.
         </p>
       </div>
       <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
